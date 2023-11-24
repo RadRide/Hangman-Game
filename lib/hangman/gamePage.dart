@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hangman_game/hangman/game.dart';
 import 'package:hangman_game/words/word.dart';
 import 'package:hangman_game/words/wordChooser.dart';
 import 'package:flash/flash.dart';
@@ -11,12 +10,11 @@ class GamePanel extends StatefulWidget {
   GamePanel(this.difficulty);
 
   @override
-  State<GamePanel> createState() => _GamePanelState(difficulty);
+  State<GamePanel> createState() => _GamePanelState();
 }
 
 class _GamePanelState extends State<GamePanel> {
 
-  String difficulty;
   Word word = Word(word: "", hint: "");
   int mistakes = 0;
 
@@ -38,10 +36,9 @@ class _GamePanelState extends State<GamePanel> {
   List<Widget> letterBoxes = [];
   List<Widget> keyboard = [];
 
-  _GamePanelState(this.difficulty);
 
   void changePic(){
-    if(mistakes >= 6){
+    if(mistakes >= 5){
       gamePopup("Game Over", "You Lost");
     }else{
       mistakes++;
@@ -50,7 +47,7 @@ class _GamePanelState extends State<GamePanel> {
 
   /// Generates a word depending on the chosen difficulty
   Word generateWord(){
-    switch (difficulty){
+    switch (widget.difficulty){
       case "Easy" : return WordChooser.easyWord();
       case "Medium" : return WordChooser.mediumWord();
       case "Hard" : return WordChooser.hardWord();
@@ -59,18 +56,6 @@ class _GamePanelState extends State<GamePanel> {
   }
 
   void showHint(){
-    // Fluttertoast.showToast(
-    //   msg: word.hint,
-    //   toastLength: Toast.LENGTH_SHORT,
-    //   gravity: ToastGravity.BOTTOM,
-    //   timeInSecForIosWeb: 5,
-    //   backgroundColor: Colors.black,
-    //   textColor: Colors.white,
-    //   fontSize: 16.0,
-    //   webBgColor: "#0f0f0f",
-    //   webPosition: "left",
-    //   webShowClose: true
-    // );
     showFlash(
         context: context,
         duration: const Duration(seconds: 5),
@@ -124,12 +109,13 @@ class _GamePanelState extends State<GamePanel> {
     }
 
     if(isWordGuessed()){
-      gamePopup("Congratulations!!", "You Guessed The Word");
+      gamePopup("Congratulations!", "You Guessed The Word");
     }
   }
   
   void gamePopup(String title, String message){
     showDialog(
+      barrierDismissible: false,
         context: context,
         builder: (content) {
           return AlertDialog(
@@ -200,7 +186,7 @@ class _GamePanelState extends State<GamePanel> {
     return Scaffold(
       backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        title: Text("Game Panel $difficulty"),
+        title: Text("Game Panel ${widget.difficulty}"),
         backgroundColor: Colors.black,
       ),
       body: Center(
@@ -268,15 +254,11 @@ class KeyboardButton extends StatefulWidget {
   Function onPressed;
 
   @override
-  State<KeyboardButton> createState() => _KeyboardButtonState(letter, onPressed);
+  State<KeyboardButton> createState() => _KeyboardButtonState();
 }
 
 class _KeyboardButtonState extends State<KeyboardButton> {
 
-  _KeyboardButtonState(this.letter, this.onPressed);
-
-  String letter;
-  Function onPressed;
   Color backColor = Colors.black;
   Color textColor = Colors.white;
 
@@ -285,7 +267,7 @@ class _KeyboardButtonState extends State<KeyboardButton> {
     return ElevatedButton(
         onPressed: () {
           setState(() {
-            onPressed();
+            widget.onPressed();
             backColor = Colors.white;
             textColor = Colors.black;
           });
@@ -294,7 +276,7 @@ class _KeyboardButtonState extends State<KeyboardButton> {
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
           backgroundColor: backColor
         ),
-        child: Text(letter, style: TextStyle(fontSize: 20, color: textColor),)
+        child: Text(widget.letter, style: TextStyle(fontSize: 20, color: textColor),)
     );
   }
 }
