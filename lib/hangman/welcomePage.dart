@@ -29,14 +29,13 @@ class WelcomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 50,),
-              Column(
-                children: [
-                  Text("Choose Difficulty To Start Game",
-                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
-                ],
+              const SizedBox(height: 50,),
+              Container(
+                alignment: Alignment.center,
+                child: const Text("Choose Difficulty To Start Game",
+                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
               ),
-              SizedBox(height: 50,),
+              const SizedBox(height: 50,),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                 child: Column(
@@ -44,9 +43,9 @@ class WelcomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ChooseDifficultyButton(difficulty: "Easy"),
-                    SizedBox(height: 15,),
+                    const SizedBox(height: 15,),
                     ChooseDifficultyButton(difficulty: "Medium"),
-                    SizedBox(height: 15,),
+                    const SizedBox(height: 15,),
                     ChooseDifficultyButton(difficulty: "Hard"),
                   ],
                 ),

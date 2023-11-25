@@ -33,9 +33,38 @@ class _GamePanelState extends State<GamePanel> {
   ];
 
   List<String> typedCharacters = [];
+
   List<Widget> letterBoxes = [];
   List<Widget> keyboard = [];
 
+
+  @override
+  void initState() {
+    super.initState();
+    startGame();
+    print("${word.word} - ${word.hint}");
+  }
+
+  void initLetterBoxes(){
+    letterBoxes = word.word.split("").map((character) =>
+        letter(character.toUpperCase(),
+            !typedCharacters.contains(character.toUpperCase()))).toList();
+  }
+
+  void initKeyboard(){
+    keyboard.clear();
+    keyboard = letters.map((letter) =>
+        KeyboardButton(letter: letter, onPressed: (){keyPressed(letter);}, key: UniqueKey(),)).toList();
+  }
+
+
+  void startGame(){
+    mistakes = 0;
+    word = generateWord();
+    typedCharacters.clear();
+    initLetterBoxes();
+    initKeyboard();
+  }
 
   void changePic(){
     if(mistakes >= 5){
@@ -67,34 +96,6 @@ class _GamePanelState extends State<GamePanel> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    startGame();
-    print("${word.word} - ${word.hint}");
-  }
-
-  void initLetterBoxes(){
-    letterBoxes = word.word.split("").map((character) =>
-        letter(character.toUpperCase(),
-            !typedCharacters.contains(character.toUpperCase()))).toList();
-  }
-
-  void initKeyboard(){
-    keyboard.clear();
-    keyboard = letters.map((letter) =>
-        KeyboardButton(letter: letter, onPressed: (){keyPressed(letter);}, key: UniqueKey(),)).toList();
-  }
-
-
-  void startGame(){
-    mistakes = 0;
-    word = generateWord();
-    typedCharacters.clear();
-    initLetterBoxes();
-    initKeyboard();
-  }
-
   /// Checks if the pressed letter is available in the word and shows their positions
   void keyPressed(String letter){
     if(!typedCharacters.contains(letter)){
@@ -111,6 +112,16 @@ class _GamePanelState extends State<GamePanel> {
     if(isWordGuessed()){
       gamePopup("Congratulations!", "You Guessed The Word");
     }
+  }
+
+  /// Checks if the all the characters are guessed
+  bool isWordGuessed(){
+    for(String character in word.word.split("")){
+      if(!typedCharacters.contains(character.toUpperCase())){
+        return false;
+      }
+    }
+    return true;
   }
   
   void gamePopup(String title, String message){
@@ -171,16 +182,6 @@ class _GamePanelState extends State<GamePanel> {
     );
   }
 
-  /// Checks if the all the characters are guessed
-  bool isWordGuessed(){
-    for(String character in word.word.split("")){
-      if(!typedCharacters.contains(character.toUpperCase())){
-        return false;
-      }
-    }
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,7 +214,7 @@ class _GamePanelState extends State<GamePanel> {
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 8,
-              runSpacing: 8,
+              runSpacing: 2,
               children: keyboard
             ),
           ],
@@ -273,7 +274,7 @@ class _KeyboardButtonState extends State<KeyboardButton> {
           });
         },
         style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
           backgroundColor: backColor
         ),
         child: Text(widget.letter, style: TextStyle(fontSize: 20, color: textColor),)

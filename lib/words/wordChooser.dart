@@ -39,8 +39,6 @@ class WordChooser{
     Word(word: "juxtapose", hint: "To place or deal with close together for contrasting effect."),
     Word(word: "obfuscate", hint: "To deliberately make something unclear or difficult to understand."),
     Word(word: "vicissitude", hint: "A change of circumstances or fortune, typically one that is unwelcome or unpleasant."),
-    // Word(word: "perspicacious", hint: "Having a ready insight into and understanding of things."),
-    // Word(word: "sesquipedalian", hint: "Characterized by long words; long-winded.")
   ];
 
   static Word easyWord(){
